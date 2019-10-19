@@ -40,6 +40,19 @@ app.get('/analysis/search', (req, res) => {
     })
 })
 
+app.get('/analysis/search_log', (req, res) => {
+    request(`http://stock2.finance.sina.com.cn/futures/api/json.php/IndexService.getInnerFuturesDailyKLine?symbol=${req.query.code}`, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            res.send({
+                status: 200,
+                data: body,
+            })
+        }
+    })
+})
+
+
+
 
 
 

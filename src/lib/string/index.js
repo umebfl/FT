@@ -1,4 +1,4 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import React, {Component} from 'react'
 
 export const string_format_position = (str, num, color) => {

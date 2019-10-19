@@ -1,4 +1,4 @@
-import R from 'ramda'
+import * as R from 'ramda'
 
 import {
     get_parse_param,
@@ -142,7 +142,7 @@ const _fetch = prop => {
         if(rv.status === 200) {
             success && success(rv.data)
 
-            conf.env === DEV && console.log('rv', url, rv.data)
+            // conf.env === DEV && console.log('rv', url, rv.data)
         } else {
             if(error) {
                 error(rv)

@@ -18,7 +18,7 @@ import {
 } from 'react-router-dom'
 
 import {
-    LocaleProvider,
+    ConfigProvider,
 } from 'antd'
 
 import zh_CN from 'antd/lib/locale-provider/zh_CN'
@@ -55,11 +55,11 @@ class Router extends Component {
         } = this.props
 
         return (
-            <LocaleProvider locale={lang === LANG_ZHCN ? zh_CN : en}>
+            <ConfigProvider locale={lang === LANG_ZHCN ? zh_CN : en}>
                 <HashRouter>
                     <Route path='/' component={App}/>
                 </HashRouter>
-            </LocaleProvider>
+            </ConfigProvider>
         )
     }
 }

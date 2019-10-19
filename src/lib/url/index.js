@@ -1,4 +1,4 @@
-import R from 'ramda'
+import * as R from 'ramda'
 
 // 默认请求类型
 export const DEFAULT_FETCH_TYPE = 'GET'
