@@ -1,6 +1,10 @@
 import * as R from 'ramda'
 import React, {Component} from 'react'
 
+import echarts  from 'echarts/lib/echarts'
+import 'echarts/lib/chart/line'
+import ReactEcharts from 'echarts-for-react'
+
 import {
     bindActionCreators,
 } from 'redux'
@@ -13,10 +17,33 @@ import {
     action,
 } from './reducer'
 
+
+
 class Home extends Component {
 
     componentDidMount() {
-        this.props.action.search()
+        // this.props.action.search()
+
+        this.props.action.reflush_log({
+            callback: this.props.action.search,
+        })
+
+    }
+
+    get_option() {
+        return {
+            xAxis: {
+                type: 'category',
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            },
+            yAxis: {
+                type: 'value',
+            },
+            series: [{
+                data: [820, 932, 901, 934, 1290, 1330, 1320],
+                type: 'line',
+            }],
+        }
     }
 
     render() {
@@ -26,10 +53,12 @@ class Home extends Component {
                 variety,
             },
             t,
+            action,
         } = this.props
 
         return (
             <div className='home'>
+
                 <div className='ft_table'>
                     <div className='ft_table_title'>
                         <span>品种</span>
@@ -66,6 +95,8 @@ class Home extends Component {
                         )(variety)
                     }
                 </div>
+
+                <ReactEcharts option={this.get_option()} style={{height:'400px'}}/>
             </div>
         )
     }

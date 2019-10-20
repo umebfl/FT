@@ -25,19 +25,16 @@ const ABS_PATH = processor.cwd()
 app.use(express.static('dist'))
 app.use(express.static('content'))
 
+// 缓存数据
+let ft_log = {}
+
+
 app.get('/', (req, res) => {
     res.sendFile(`${ABS_PATH}/dist/index.html`)
 })
 
 app.get('/analysis/search', (req, res) => {
-    request(`http://hq.sinajs.cn/?list=${req.query.list}`, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            res.send({
-                status: 200,
-                data: body,
-            })
-        }
-    })
+    get_info_log(req, res)
 })
 
 app.get('/analysis/search_log', (req, res) => {
@@ -51,8 +48,72 @@ app.get('/analysis/search_log', (req, res) => {
     })
 })
 
+app.get('/analysis/refresh_log', (req, res) => {
+    const list = req.query.list.split(',')
 
+    get_all_day_log(list, res)
+})
 
+// 请求当前数据
+function get_info_log(req, res) {
+
+    const list = req.query.list
+    const list_code = req.query.list_code
+
+    request(`http://hq.sinajs.cn/?list=${list}`, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            const list_code_arr = list_code.split(',')
+            const item_arr = body.split(';')
+
+            for(var i = 0; i < list_code_arr.length; i++) {
+                const item = item_arr[i]
+                let info = item.split(',')
+                let key = list_code_arr[i]
+
+                info.pop()
+
+                ft_log[key] = {
+                    ...ft_log[key],
+                    info,
+                }
+            }
+
+            res.send({
+                status: 200,
+                data: ft_log,
+            })
+        }
+    })
+}
+
+// 请求全部日数据
+function get_all_day_log(list, res) {
+    let finish_count = 0
+
+    for (var i = 0; i < list.length; i++) {
+        const code = list[i]
+
+        request(`http://stock2.finance.sina.com.cn/futures/api/json.php/IndexService.getInnerFuturesDailyKLine?symbol=${code}0`, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                // 解析文本
+                // 缓存数据
+                ft_log[code] = {
+                    ...ft_log[code],
+                    all_day: JSON.parse(body),
+                }
+
+                finish_count++
+
+                if(finish_count === list.length) {
+                    res.send({
+                        status: 200,
+                        data: finish_count,
+                    })
+                }
+            }
+        })
+    }
+}
 
 
 
