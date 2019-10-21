@@ -81,65 +81,110 @@ export const action = {
 
                 dispatch(
                     module_setter({
-                        variety: R.addIndex(R.map)(
-                            (v, k) => {
+                        variety: R.compose(
+                            R.sort(
+                                (a, b) => a.price_state - b.price_state
+                            ),
+                            R.addIndex(R.map)(
+                                (v, k) => {
 
-                                const bond_count = v.bond_count
-                                const lever = v.lever
+                                    const bond_count = v.bond_count
+                                    const lever = v.lever
 
-                                const info = rv[v.code].info
-                                const price = parseInt(info[8])
-                                const bond = parseInt(price * bond_count / lever)
+                                    const info = rv[v.code].info
+                                    const opening_price = parseInt(info[2])
+                                    const price = parseInt(info[8])
 
-                                //[0] 日期
-                                //[1] 开盘
-                                //[2] 最低
-                                //[3] 最高
-                                //[4] 收盘
-                                //[5] 成交
-                                const all_day = rv[v.code].all_day || []
+                                    // 波动幅度
+                                    const wave = ((price - opening_price) / opening_price * 100).toFixed(2)
+                                    const bond = parseInt(price * bond_count / lever)
 
-                                let all_day_analy = {}
+                                    //[0] 日期
+                                    //[1] 开盘
+                                    //[2] 最低
+                                    //[3] 最高
+                                    //[4] 收盘
+                                    //[5] 成交
+                                    const all_day = rv[v.code].all_day || []
 
-                                if(all_day.length) {
-                                    const nearly_week_start = parseInt(all_day[all_day.length - 6][4])
-                                    const nearly_week_end = parseInt(all_day[all_day.length - 1][4])
-                                    const nearly_week = nearly_week_end - nearly_week_start
+                                    let all_day_analy = {}
 
-                                    const nearly_month_start = parseInt(all_day[all_day.length - 20][4])
-                                    const nearly_month_end = parseInt(all_day[all_day.length - 1][4])
-                                    const nearly_month = nearly_month_end - nearly_month_start
+                                    if(all_day.length) {
+                                        const nearly_week_start = parseInt(all_day[all_day.length - 6][4])
+                                        const nearly_week = price - nearly_week_start
 
-                                    const nearly_half_year_start = parseInt(all_day[all_day.length - 120][4])
-                                    const nearly_half_year_end = parseInt(all_day[all_day.length - 1][4])
-                                    const nearly_half_year = nearly_half_year_end - nearly_half_year_start
+                                        const nearly_month_start = parseInt(all_day[all_day.length - 20][4])
+                                        const nearly_month = price - nearly_month_start
 
-                                    all_day_analy = {
-                                        // 近半年 多空
-                                        nearly_half_year_rate: (nearly_half_year / nearly_half_year_start * 100).toFixed(2),
-                                        nearly_half_year_str: nearly_half_year < 0 ? '空' : '多',
-                                        nearly_half_year: nearly_half_year,
+                                        const nearly_half_year_start = parseInt(all_day[all_day.length - 120][4])
+                                        const nearly_half_year = price - nearly_half_year_start
 
-                                        // 近一月 多空
-                                        nearly_month_rate: (nearly_month / nearly_month_start * 100).toFixed(2),
-                                        nearly_month_str: nearly_month < 0 ? '空' : '多',
-                                        nearly_month: nearly_month,
+                                        // 最高价
+                                        const price_max = parseInt(R.reduce((a, b) => b[4] !== 0 && a > b[4] ? a : b[4], price_max)(all_day))
+                                        // 最低价
+                                        const price_min = parseInt(R.reduce((a, b) => b[4] !== 0 && a > b[4] ? b[4] : a, price_max)(all_day))
 
-                                        // 近一周 多空
-                                        nearly_week_rate: (nearly_week / nearly_week_start * 100).toFixed(2),
-                                        nearly_week_str: nearly_week < 0 ? '空' : '多',
-                                        nearly_week: nearly_week,
+                                        const price_state = Math.ceil((price - price_min) / (price_max - price_min) * 100)
+
+                                        all_day_analy = {
+
+                                            price_max,
+                                            price_min,
+
+                                            // 价格状态  (4当前 - 2最低) / (10最高 - 2最低) * 100
+                                            price_state_str: R.cond([
+                                                [
+                                                    v => v < 20,
+                                                    v => '低位',
+                                                ],
+                                                [
+                                                    v => v < 40,
+                                                    v => '中低位',
+                                                ],
+                                                [
+                                                    v => v < 60,
+                                                    v => '中位',
+                                                ],
+                                                [
+                                                    v => v < 80,
+                                                    v => '中高位',
+                                                ],
+                                                [
+                                                    R.T,
+                                                    v => '高位',
+                                                ],
+                                            ])(price_state),
+
+                                            price_state,
+
+                                            // 近半年 多空
+                                            nearly_half_year_rate: Math.ceil(nearly_half_year / nearly_half_year_start * 100),
+                                            nearly_half_year_str: nearly_half_year < 0 ? '空' : '多',
+                                            nearly_half_year: nearly_half_year,
+
+                                            // 近一月 多空
+                                            nearly_month_rate: Math.ceil(nearly_month / nearly_month_start * 100),
+                                            nearly_month_str: nearly_month < 0 ? '空' : '多',
+                                            nearly_month: nearly_month,
+
+                                            // 近一周 多空
+                                            nearly_week_rate: Math.ceil(nearly_week / nearly_week_start * 100),
+                                            nearly_week_str: nearly_week < 0 ? '空' : '多',
+                                            nearly_week: nearly_week,
+                                        }
                                     }
-                                }
 
-                                return ({
-                                    ...v,
-                                    price,
-                                    bond,
-                                    all_day,
-                                    ...all_day_analy,
-                                })
-                            }
+                                    return ({
+                                        ...v,
+                                        price,
+                                        opening_price,
+                                        wave,
+                                        bond,
+                                        all_day,
+                                        ...all_day_analy,
+                                    })
+                                }
+                            )
                         )(variety),
                     })
                 )
@@ -159,3 +204,27 @@ export default handleActions({
         ...payload,
     }),
 }, init_state)
+
+
+// console.log(
+//     CLEAR_CODE,
+//     // info,
+//     `开盘价: ${info[2]}\n`,
+//     `最高价: ${info[3]}\n`,
+//     `最低价: ${info[4]}\n`,
+//     `昨日收盘价: ${info[5]}\n`,
+//     `最新价: ${info[8]}\n`,
+//     `结算价: ${info[9]}\n`,
+//     `昨结算: ${info[10]}\n`,
+//     `买一价: ${info[6]}\n`,
+//     `卖一价: ${info[7]}\n`,
+//     `买量: ${info[11]}\n`,
+//     `卖量: ${info[12]}\n`,
+//     `持仓量: ${info[13]}\n`,
+//     `成交量: ${info[14]}\n`,
+//     `${interval_count}`.grey,
+//     `${text}`.grey,
+//     `${average}`.grey,  // 监控时间段内平均
+//     `${price_margin}`.grey,  // 上一间隔价差
+//     quick ? `${quick_price_margin}`.red : `${quick_price_margin}`.grey  // INTERVAL * QUICK_INTERVAL 秒内价差
+// )

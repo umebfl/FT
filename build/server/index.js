@@ -6,6 +6,7 @@ const processor = require('process')
 const express = require('express')
 const webpack = require('webpack')
 const request = require('request')
+const R = require('ramda')
 
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
@@ -96,10 +97,22 @@ function get_all_day_log(list, res) {
         request(`http://stock2.finance.sina.com.cn/futures/api/json.php/IndexService.getInnerFuturesDailyKLine?symbol=${code}0`, function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 // 解析文本
+                const all_day_str = JSON.parse(body)
+
+                const all_day = R.compose(
+                    R.map(
+                        R.addIndex(R.map)(
+                            (v, k) => k === 0 ? v : parseInt(v)
+                        ),
+                    ),
+                    // 只要前2.5年600天
+                    R.takeLast(600)
+                )(all_day_str)
+
                 // 缓存数据
                 ft_log[code] = {
                     ...ft_log[code],
-                    all_day: JSON.parse(body),
+                    all_day,
                 }
 
                 finish_count++
