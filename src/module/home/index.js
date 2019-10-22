@@ -74,14 +74,16 @@ class Home extends Component {
                         <span style={{width: '80px'}}>近周预估</span>
                         <span style={{width: '80px'}}>操作提示</span>
                         <span>价格状态(%)</span>
+                        <span>近一年走势(%)</span>
                         <span>近半年走势(%)</span>
+                        <span>近三月走势(%)</span>
                         <span>近一月走势(%)</span>
                         <span>近一周走势(%)</span>
-                        <span>一手保证金</span>
-                        <span>保证金比例</span>
                         <span>月份</span>
                         <span>行业</span>
                         <span>1元波动</span>
+                        <span>一手保证金</span>
+                        <span>保证金比例</span>
                         <span>资金配比</span>
                         <span style={{width: '80px'}}>优先级</span>
                     </div>
@@ -102,8 +104,14 @@ class Home extends Component {
                                     <span className={v.price_state_str === '中位' ? '' : v.price_state > 50 ? 'ft_up' : 'ft_down'}>
                                         {v.price_state_str} / {v.price_state}
                                     </span>
+                                    <span className={v.nearly_year_str === '多' ? 'ft_up' : 'ft_down'}>
+                                        {v.nearly_year_str} / {v.nearly_year_rate}
+                                    </span>
                                     <span className={v.nearly_half_year_str === '多' ? 'ft_up' : 'ft_down'}>
                                         {v.nearly_half_year_str} / {v.nearly_half_year_rate}
+                                    </span>
+                                    <span className={v.nearly_3_month_str === '多' ? 'ft_up' : 'ft_down'}>
+                                        {v.nearly_3_month_str} / {v.nearly_3_month_rate}
                                     </span>
                                     <span className={v.nearly_month_str === '多' ? 'ft_up' : 'ft_down'}>
                                         {v.nearly_month_str} / {v.nearly_month_rate}
@@ -111,12 +119,13 @@ class Home extends Component {
                                     <span className={v.nearly_week_str === '多' ? 'ft_up' : 'ft_down'}>
                                         {v.nearly_week_str} / {v.nearly_week_rate}
                                     </span>
-                                    <span>{v.bond}</span>
-                                    <span>{v.lever}</span>
                                     <span>{v.month}</span>
                                     <span>{v.industry}</span>
                                     <span>{v.bond_count}</span>
-                                    <span style={{width: '80px'}}></span>
+                                    <span>{v.bond}</span>
+                                    <span>{v.lever}</span>
+                                    <span>{v.fund} / {v.can_buy}</span>
+                                    <span style={{width: '80px'}}>{v.priority}</span>
                                 </div>
                             )
                         )(variety)
