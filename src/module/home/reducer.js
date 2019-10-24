@@ -11,6 +11,9 @@ import {
 
 import _fetch from 'SYSWEB/lib/fetch'
 import variety from 'SYS/data/variety'
+import expenditure from 'SYS/data/expenditure'
+import assets from 'SYS/data/assets'
+import cash from 'SYS/data/出入金'
 
 export const MODULE_KEY = 'home'
 
@@ -18,11 +21,19 @@ const init_state = {
 
     variety,
 
+    assets,
+    expenditure,
+    cash,
+
 }
 
 const SEARCH_PATH = '/analysis/search'
 const SEARCH_LOG_PATH = '/analysis/search_log'
 const REFRESH_LOG_PATH = '/analysis/refresh_log'
+
+// 分配
+export const DISTRIBUTION_HAQ = 'haq'
+export const DISTRIBUTION_HWG = 'hwh'
 
 // 优先级权重
 const PRIORITY_WEIGHT = 100
@@ -38,6 +49,9 @@ const FLUCTUATION_RANGE_WEIGHT = 10
 
 // 保证金权重
 const BOND_WEIGHT = 10
+
+// 归属权重
+const DISTRIBUTION_WEIGHT = 5
 
 // 总权益
 const AGGREGATE_INTEREST = 300000
@@ -196,8 +210,10 @@ export const action = {
                                         // 保证金比例
                                         const weight_bond = get_bond_weight(lever)
 
+                                        const weight_distribution = v.distribution === DISTRIBUTION_HAQ ? DISTRIBUTION_WEIGHT : 0
+
                                         // 优先级
-                                        const priority = get_priority(weight_price_state, weight_timeline, weight_fluctuation_range, weight_bond)
+                                        const priority = get_priority(weight_price_state, weight_timeline, weight_fluctuation_range, weight_bond, weight_distribution)
 
 
                                         all_day_analy = {
@@ -206,6 +222,7 @@ export const action = {
                                             weight_timeline,
                                             weight_fluctuation_range,
                                             weight_bond,
+                                            weight_distribution,
 
                                             priority,
 
@@ -418,9 +435,9 @@ const get_bond_weight = (lever) => {
 }
 
 // 获取优先级权重
-const get_priority = (weight_price_state, weight_timeline, weight_fluctuation_range, weight_bond) => {
+const get_priority = (weight_price_state, weight_timeline, weight_fluctuation_range, weight_bond, weight_distribution) => {
 
-    return weight_price_state + weight_timeline + weight_fluctuation_range + weight_bond
+    return weight_price_state + weight_timeline + weight_fluctuation_range + weight_bond + weight_distribution
 }
 
 const module_setter = createAction('home_setter')

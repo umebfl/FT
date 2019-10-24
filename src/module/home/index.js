@@ -15,6 +15,8 @@ import {
 
 import {
     action,
+    DISTRIBUTION_HAQ,
+    DISTRIBUTION_HWG,
 } from './reducer'
 
 // 定时请求
@@ -57,6 +59,9 @@ class Home extends Component {
             history,
             home: {
                 variety,
+                assets,
+                expenditure,
+                cash,
             },
             t,
             action,
@@ -70,37 +75,40 @@ class Home extends Component {
                         <span style={{width: '50px'}}>品种</span>
                         <span style={{width: '80px'}}>价格(%)</span>
                         <span style={{width: '80px'}}>波幅(%)</span>
-                        <span style={{width: '80px'}}>近月预估</span>
-                        <span style={{width: '80px'}}>近周预估</span>
-                        <span style={{width: '80px'}}>操作提示</span>
+                        <span className='hidden' style={{width: '80px'}}>近月预估</span>
+                        <span className='hidden' style={{width: '80px'}}>近周预估</span>
+                        <span className='hidden' style={{width: '80px'}}>操作提示</span>
                         <span>价格状态(%)</span>
                         <span>近一年走势(%)</span>
                         <span>近半年走势(%)</span>
                         <span>近三月走势(%)</span>
                         <span>近一月走势(%)</span>
                         <span>近一周走势(%)</span>
-                        <span>月份</span>
+                        <span className='hidden'>月份</span>
                         <span>行业</span>
-                        <span>1元波动</span>
+                        <span className='hidden'>1元波动</span>
                         <span>一手保证金</span>
                         <span>保证金比例</span>
                         <span>资金配比</span>
                         <span style={{width: '80px'}}>优先级</span>
+                        <span style={{width: '80px'}}>累计盈利</span>
                     </div>
                     {
                         R.map(
                             v => (
                                 <div key={v.code}>
-                                    <span style={{width: '50px'}}>{v.name}</span>
+                                    <span style={{width: '50px'}} className={v.distribution === DISTRIBUTION_HAQ ? 'ft_haq' : ''}>
+                                        {v.name}
+                                    </span>
                                     <span style={{width: '80px'}} className={v.wave > 0 ? 'ft_up' : 'ft_down'}>
                                         {v.price}
                                     </span>
                                     <span style={{width: '80px'}} className={v.wave > 0 ? 'ft_up' : 'ft_down'}>
                                         {v.wave}
                                     </span>
-                                    <span style={{width: '80px'}}></span>
-                                    <span style={{width: '80px'}}></span>
-                                    <span style={{width: '80px'}}></span>
+                                    <span className='hidden' style={{width: '80px'}}></span>
+                                    <span className='hidden' className='hidden' style={{width: '80px'}}></span>
+                                    <span className='hidden' style={{width: '80px'}}></span>
                                     <span className={v.price_state_str === '中位' ? '' : v.price_state > 50 ? 'ft_up' : 'ft_down'}>
                                         {v.price_state_str} / {v.price_state}
                                     </span>
@@ -119,20 +127,81 @@ class Home extends Component {
                                     <span className={v.nearly_week_str === '多' ? 'ft_up' : 'ft_down'}>
                                         {v.nearly_week_str} / {v.nearly_week_rate}
                                     </span>
-                                    <span>{v.month}</span>
+                                    <span className='hidden'>{v.month}</span>
                                     <span>{v.industry}</span>
-                                    <span>{v.bond_count}</span>
+                                    <span className='hidden'>{v.bond_count}</span>
                                     <span>{v.bond}</span>
                                     <span>{v.lever}</span>
                                     <span>{v.fund} / {v.can_buy}</span>
                                     <span style={{width: '80px'}}>{v.priority}</span>
+                                    <span>{v.profit}</span>
                                 </div>
                             )
                         )(variety)
                     }
                 </div>
 
+                <div className='info'>
+                    <div className='assets'>
+                        <div className='title'>资产 ({R.reduce((a, b) => a + b.money, 0)(assets)})</div>
+                        <div className='list'>
+                            {
+                                R.addIndex(R.map)(
+                                    (v, k) => (
+                                        <div id={k}>
+                                            <div className='item_name'>
+                                                {v.id}
+                                            </div>
+                                            <div className='item_money'>
+                                                {v.money}
+                                            </div>
+                                        </div>
+                                    )
+                                )(assets)
+                            }
+                        </div>
+                    </div>
 
+                    <div className='expenditure'>
+                        <div className='title'>每月支出 ({R.reduce((a, b) => a + b.money, 0)(expenditure)})</div>
+                        <div className='list'>
+                            {
+                                R.addIndex(R.map)(
+                                    (v, k) => (
+                                        <div id={k}>
+                                            <div className='item_name'>
+                                                {v.id}
+                                            </div>
+                                            <div className='item_money'>
+                                                {v.money}
+                                            </div>
+                                        </div>
+                                    )
+                                )(expenditure)
+                            }
+                        </div>
+                    </div>
+
+                    <div className='expenditure'>
+                        <div className='title'>出入金</div>
+                        <div className='list'>
+                            {
+                                R.addIndex(R.map)(
+                                    (v, k) => (
+                                        <div id={k}>
+                                            <div className='item_name'>
+                                                {v.msg}
+                                            </div>
+                                            <div className='item_money'>
+                                                {v.money}
+                                            </div>
+                                        </div>
+                                    )
+                                )(cash)
+                            }
+                        </div>
+                    </div>
+                </div>
             </div>
         )
     }

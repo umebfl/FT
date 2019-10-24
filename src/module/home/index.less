@@ -1,6 +1,9 @@
 
 .home {
 
+    display: flex;
+    flex-direction: column;
+
     .ft_table {
         margin: 10px 20px;
         flex-direction: column;
@@ -10,11 +13,42 @@
         }
 
         div {
-            margin: 10px;
+            margin: 5px;
 
             span {
                 width: 110px;
                 display: inline-block;
+            }
+        }
+    }
+
+    .info {
+        margin: 10px 20px;
+        flex-direction: row;
+
+        > div {
+            flex-direction: column;
+            margin: 0 5px;
+            border: 1px solid #f1ebeb;
+            padding: 5px;
+            border-radius: 6px;
+        }
+
+        .title {
+            font-weight: bold;
+            margin: 5px 0px;
+        }
+
+        .list {
+            flex-direction: column;
+            > div {
+                margin: 2px 0;
+            }
+
+            .item_name,
+            .item_money {
+                margin: 0px 2px;
+                width: 60px;
             }
         }
     }
@@ -26,4 +60,8 @@
 }
 .ft_down {
     color: green;
+}
+
+.ft_haq {
+    color: MediumBlue;
 }
