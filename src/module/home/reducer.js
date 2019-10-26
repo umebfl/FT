@@ -45,14 +45,21 @@ const PRIORITY_WEIGHT = 100
 // 价格状态 权重20 计算：Math.abs(50 - 价格状态) / 50 * PRICE_STATE_WEIGHT
 const PRICE_STATE_WEIGHT = 10
 
+// 盈利权重 正负2千1点 最高10点
+const PROFIT_WEIGHT = 1
+const PROFIT_WEIGHT_PROPORTION = 2000
+
 // 时间段权重
-const TIMELINE_WEIGHT = 10
+const TIMELINE_WEIGHT = 5
 
 // 波动幅度权重
 const FLUCTUATION_RANGE_WEIGHT = 10
 
 // 保证金权重
 const BOND_WEIGHT = 10
+
+// 当前波动幅度权重
+const CURR_FLUCTUATION_RANGE_WEIGHT = 6
 
 // 归属权重
 const DISTRIBUTION_WEIGHT = 5
@@ -211,24 +218,55 @@ export const action = {
                                         // 波动幅度权重
                                         const weight_fluctuation_range = get_fluctuation_range_weight(nearly_year_rate, nearly_half_year_rate, nearly_3_month_rate, nearly_month_rate, nearly_week_rate)
 
+                                        // 当前波动幅度权重
+                                        const weight_curr_fluctuation_range = get_curr_fluctuation_range_weight(wave)
+
+                                        // 盈利权重
+                                        const weight_profit = Math.ceil(Math.abs(v.profit) / PROFIT_WEIGHT_PROPORTION * PROFIT_WEIGHT)
+
                                         // 保证金比例
                                         const weight_bond = get_bond_weight(lever)
 
                                         const weight_distribution = v.distribution === DISTRIBUTION_HAQ ? DISTRIBUTION_WEIGHT : 0
 
                                         // 优先级
-                                        const priority = get_priority(weight_price_state, weight_timeline, weight_fluctuation_range, weight_bond, weight_distribution)
+                                        const priority_arr = [
+                                            {
+                                                text: '价格状态',
+                                                val: weight_price_state,
+                                            },
+                                            {
+                                                text: '时间段',
+                                                val: weight_timeline,
+                                            },
+                                            {
+                                                text: '波动幅度',
+                                                val: weight_fluctuation_range,
+                                            },
+                                            {
+                                                text: '保证金',
+                                                val: weight_bond,
+                                            },
+                                            {
+                                                text: '分配',
+                                                val: weight_distribution,
+                                            },
+                                            {
+                                                text: '当前价格波动',
+                                                val: weight_curr_fluctuation_range,
+                                            },
+                                            {
+                                                text: '盈利',
+                                                val: weight_profit,
+                                            },
+                                        ]
 
+                                        const priority = R.reduce((a, b) => a + b.val, 0)(priority_arr)
 
                                         all_day_analy = {
 
-                                            weight_price_state,
-                                            weight_timeline,
-                                            weight_fluctuation_range,
-                                            weight_bond,
-                                            weight_distribution,
-
                                             priority,
+                                            priority_arr,
 
                                             price_max,
                                             price_min,
@@ -307,6 +345,13 @@ export const action = {
 
     },
 
+}
+
+
+
+// 获取波动幅度权重
+const get_curr_fluctuation_range_weight = (wave) => {
+    return parseInt(Math.abs(wave) * CURR_FLUCTUATION_RANGE_WEIGHT)
 }
 
 // 获取波动幅度权重
@@ -436,12 +481,6 @@ const get_bond_weight = (lever) => {
     }
 
     return weight * BOND_WEIGHT
-}
-
-// 获取优先级权重
-const get_priority = (weight_price_state, weight_timeline, weight_fluctuation_range, weight_bond, weight_distribution) => {
-
-    return weight_price_state + weight_timeline + weight_fluctuation_range + weight_bond + weight_distribution
 }
 
 const module_setter = createAction('home_setter')
