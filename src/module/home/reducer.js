@@ -14,6 +14,8 @@ import variety from 'SYS/data/variety'
 import expenditure from 'SYS/data/expenditure'
 import assets from 'SYS/data/assets'
 import cash from 'SYS/data/出入金'
+import target from 'SYS/data/target'
+import todo from 'SYS/data/todo'
 
 export const MODULE_KEY = 'home'
 
@@ -24,6 +26,8 @@ const init_state = {
     assets,
     expenditure,
     cash,
+    target,
+    todo,
 
 }
 

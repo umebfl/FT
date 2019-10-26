@@ -8,6 +8,7 @@ export default [
         distribution: 'hwh',
         lever: 9.09,
         bond_count: 10,
+        profit: 0,
     },
     {
         code: 'TA',
@@ -17,7 +18,7 @@ export default [
         distribution: '',
         lever: 9.09,
         bond_count: 5,
-        profit: -1800,
+        profit: -3100,
     },
     {
         code: 'PP',
@@ -46,16 +47,6 @@ export default [
         industry: '农产品',
         distribution: '',
         lever: 10,
-        bond_count: 10,
-        profit: 0,
-    },
-    {
-        code: 'C',
-        name: '玉米',
-        month: '2001',
-        industry: '农产品',
-        distribution: '',
-        lever: 11.11,
         bond_count: 10,
         profit: 0,
     },
@@ -117,7 +108,7 @@ export default [
         distribution: 'haq',
         lever: 7.14,
         bond_count: 15,
-        profit: -200,
+        profit: -1520,
     },
     {
         code: 'J',
@@ -127,7 +118,7 @@ export default [
         distribution: 'haq',
         lever: 7.69,
         bond_count: 100,
-        profit: -10000,
+        profit: -13000,
     },
     {
         code: 'BU',

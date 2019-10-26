@@ -62,6 +62,8 @@ class Home extends Component {
                 assets,
                 expenditure,
                 cash,
+                target,
+                todo,
             },
             t,
             action,
@@ -153,11 +155,37 @@ class Home extends Component {
                                                 {v.id}
                                             </div>
                                             <div className='item_money'>
+                                                {v.target}
+                                            </div>
+                                            <div className='item_use'>
+                                                {v.use}
+                                            </div>
+                                            <div className='item_money'>
                                                 {v.money}
                                             </div>
                                         </div>
                                     )
                                 )(assets)
+                            }
+                        </div>
+                    </div>
+
+                    <div className='liabilities'>
+                        <div className='title'>负债 ({R.reduce((a, b) => a + (b.balance || 0), 0)(expenditure)})</div>
+                        <div className='list'>
+                            {
+                                R.addIndex(R.map)(
+                                    (v, k) => v.balance ? (
+                                        <div id={k}>
+                                            <div className='item_name'>
+                                                {v.id}
+                                            </div>
+                                            <div className='item_money'>
+                                                {v.balance}
+                                            </div>
+                                        </div>
+                                    ) : ''
+                                )(expenditure)
                             }
                         </div>
                     </div>
@@ -201,6 +229,50 @@ class Home extends Component {
                             }
                         </div>
                     </div>
+
+                    <div className='target'>
+                        <div className='title'>目标</div>
+                        <div className='list'>
+                            {
+                                R.addIndex(R.map)(
+                                    (v, k) => (
+                                        <div id={k}>
+                                            <div className='item_name'>
+                                                {v.msg}
+                                            </div>
+                                            <div className='item_money'>
+                                                {v.money}
+                                            </div>
+                                            <div>
+                                                {v.finish ? 'ok' : '-'}
+                                            </div>
+                                        </div>
+                                    )
+                                )(target)
+                            }
+                        </div>
+                    </div>
+
+                    <div className='todo'>
+                        <div className='title'>待办</div>
+                        <div className='list'>
+                            {
+                                R.addIndex(R.map)(
+                                    (v, k) => (
+                                        <div id={k}>
+                                            <div className='item_name'>
+                                                {v.msg}
+                                            </div>
+                                            <div className='item_money'>
+                                                {v.target}
+                                            </div>
+                                        </div>
+                                    )
+                                )(todo)
+                            }
+                        </div>
+                    </div>
+
                 </div>
             </div>
         )
