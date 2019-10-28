@@ -45,9 +45,21 @@ const PRIORITY_WEIGHT = 100
 // 价格状态 权重20 计算：Math.abs(50 - 价格状态) / 50 * PRICE_STATE_WEIGHT
 const PRICE_STATE_WEIGHT = 10
 
+// 当前盈利权重 正负2千1点 最高10点
+const CUR_PROFIT_WEIGHT = 1
+const CUR_PROFIT_WEIGHT_PROPORTION = 8000
+
 // 盈利权重 正负2千1点 最高10点
 const PROFIT_WEIGHT = 1
-const PROFIT_WEIGHT_PROPORTION = 2000
+const PROFIT_WEIGHT_PROPORTION = 4000
+
+// 一段时间内最高最低价格波动幅度权重 正负10,1点
+const HL_FLUCTUATION_RANGE_WEIGHT = 1
+const HL_FLUCTUATION_RANGE_WEIGHT_YEAR_PROPORTION = 10
+const HL_FLUCTUATION_RANGE_WEIGHT_HALF_YEAR_PROPORTION = 8
+const HL_FLUCTUATION_RANGE_WEIGHT_3MONTH_PROPORTION = 4
+const HL_FLUCTUATION_RANGE_WEIGHT_MONTH_PROPORTION = 2
+const HL_FLUCTUATION_RANGE_WEIGHT_WEEK_PROPORTION = 1
 
 // 时间段权重
 const TIMELINE_WEIGHT = 5
@@ -68,7 +80,10 @@ const DISTRIBUTION_WEIGHT = 5
 const AGGREGATE_INTEREST = 300000
 
 // 最大持仓数  3短 2中 2长
-const MAX_HOLD = 7
+export const MAX_HOLD = 7
+
+// 止损比例
+export const CUT_RATE = 0.01
 
 export const action = {
 
@@ -215,22 +230,66 @@ export const action = {
                                         // 时间段状态权重
                                         const weight_timeline = get_timeline_weight(nearly_year, nearly_half_year, nearly_3_month, nearly_month, nearly_week)
 
-                                        // 波动幅度权重
+                                        // 最高-最低 价格波动幅度权重
                                         const weight_fluctuation_range = get_fluctuation_range_weight(nearly_year_rate, nearly_half_year_rate, nearly_3_month_rate, nearly_month_rate, nearly_week_rate)
+
+                                        // 近一年最高-最低价格波动
+                                        const weight_h_l_fr_year = get_h_l_fr_weight(all_day, 240, HL_FLUCTUATION_RANGE_WEIGHT_YEAR_PROPORTION)
+
+                                        // 近半年最高-最低价格波动权重
+                                        const weight_h_l_fr_half_year = get_h_l_fr_weight(all_day, 120, HL_FLUCTUATION_RANGE_WEIGHT_HALF_YEAR_PROPORTION)
+
+                                        // 近三月最高-最低价格波动权重
+                                        const weight_h_l_fr_3month = get_h_l_fr_weight(all_day, 60, HL_FLUCTUATION_RANGE_WEIGHT_3MONTH_PROPORTION)
+
+                                        // 近一月最高-最低价格波动权重
+                                        const weight_h_l_fr_month = get_h_l_fr_weight(all_day, 20, HL_FLUCTUATION_RANGE_WEIGHT_MONTH_PROPORTION)
+
+                                        // 最近周最高-最低价格波动权重
+                                        const weight_h_l_fr_week = get_h_l_fr_weight(all_day, 5, HL_FLUCTUATION_RANGE_WEIGHT_WEEK_PROPORTION)
 
                                         // 当前波动幅度权重
                                         const weight_curr_fluctuation_range = get_curr_fluctuation_range_weight(wave)
 
                                         // 盈利权重
-                                        const weight_profit = Math.ceil(Math.abs(v.profit) / PROFIT_WEIGHT_PROPORTION * PROFIT_WEIGHT)
+                                        const profit = v.profit
+                                        const profit_count = R.reduce((a, b) => a + b[3], 0)(profit)
+                                        const weight_profit = Math.ceil(Math.abs(profit_count) / PROFIT_WEIGHT_PROPORTION * PROFIT_WEIGHT)
 
                                         // 保证金比例
                                         const weight_bond = get_bond_weight(lever)
 
                                         const weight_distribution = v.distribution === DISTRIBUTION_HAQ ? DISTRIBUTION_WEIGHT : 0
 
+                                        // 当前持仓总额
+                                        const cur_hold_count = v.hold.length ? v.hold[1] * bond : 0
+
+                                        // 当前持仓盈亏
+                                        const cur_profit = v.hold.length
+                                            ? v.hold[2] === 1
+                                                ? parseInt((price - v.hold[0]) * v.hold[1] * v.bond_count)
+                                                : parseInt((v.hold[0] - price) * v.hold[1] * v.bond_count)
+                                            : 0
+
+                                        // 当前持仓盈亏比例
+                                        const cur_profit_rate = v.hold.length ? parseInt(cur_profit / cur_hold_count * 100) : 0
+
+                                        // 止损
+                                        const cut_price = v.hold.length
+                                            ? v.hold[2] === 1
+                                                ? parseInt(v.hold[0] * (1 - CUT_RATE))
+                                                : parseInt(v.hold[0] * (1 + CUT_RATE))
+                                            : 0
+
+                                        // 当前盈亏权重
+                                        const weight_cur_profit = Math.ceil(Math.abs(cur_hold_count) / CUR_PROFIT_WEIGHT_PROPORTION * CUR_PROFIT_WEIGHT)
+
                                         // 优先级
                                         const priority_arr = [
+                                            {
+                                                text: '当前盈亏',
+                                                val: weight_cur_profit,
+                                            },
                                             {
                                                 text: '价格状态',
                                                 val: weight_price_state,
@@ -259,11 +318,40 @@ export const action = {
                                                 text: '盈利',
                                                 val: weight_profit,
                                             },
+                                            {
+                                                text: '近一年极端波动',
+                                                val: weight_h_l_fr_year,
+                                            },
+                                            {
+                                                text: '近半年极端波动',
+                                                val: weight_h_l_fr_half_year,
+                                            },
+                                            {
+                                                text: '近三月极端波动',
+                                                val: weight_h_l_fr_3month,
+                                            },
+                                            {
+                                                text: '近一月极端波动',
+                                                val: weight_h_l_fr_month,
+                                            },
+                                            {
+                                                text: '最近周极端波动',
+                                                val: weight_h_l_fr_week,
+                                            },
                                         ]
 
                                         const priority = R.reduce((a, b) => a + b.val, 0)(priority_arr)
 
                                         all_day_analy = {
+
+                                            cut_price,
+
+                                            profit,
+                                            profit_count,
+
+                                            cur_profit,
+                                            cur_hold_count,
+                                            cur_profit_rate,
 
                                             priority,
                                             priority_arr,
@@ -347,6 +435,26 @@ export const action = {
 
 }
 
+
+// 计算一段时间内最高-最低价格波动幅度
+const get_h_l_fr_weight = (all_day, day_len, proportion) => {
+    return R.compose(
+        v => {
+            // 最高10 最低1
+            // 计算波动幅度
+            const max = v[0]
+            const min = v[v.length - 1]
+
+            return Math.ceil((max[4] - min[4]) / max[4] * 100 / proportion * HL_FLUCTUATION_RANGE_WEIGHT)
+        },
+        // 找到最高,最低数值
+        R.sort(
+            (a, b) => b[4] - a[4]
+        ),
+        // 截取时间段
+        R.takeLast(day_len)
+    )(all_day)
+}
 
 
 // 获取波动幅度权重
@@ -433,9 +541,9 @@ const get_timeline_weight = (nearly_year, nearly_half_year, nearly_3_month, near
 
     // 正正正正正 || 反反反反反
     if(nearly_year >= 0 && nearly_half_year >= 0 && nearly_3_month >= 0 && nearly_month >= 0 && nearly_week >= 0) {
-        weight = 0.6
+        weight = -2
     } else if(nearly_year <= 0 && nearly_half_year <= 0 && nearly_3_month <= 0 && nearly_month <= 0 && nearly_week <= 0) {
-        weight = 0.6
+        weight = -2
     }
 
     // 正正正正反 || 反反反反正

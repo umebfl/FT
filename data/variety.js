@@ -8,7 +8,8 @@ export default [
         distribution: 'hwh',
         lever: 9.09,
         bond_count: 10,
-        profit: 0,
+        hold: [],
+        profit: [],
     },
     {
         code: 'TA',
@@ -18,7 +19,12 @@ export default [
         distribution: '',
         lever: 9.09,
         bond_count: 5,
-        profit: -3100,
+        // 价格, 数量, 多1空0
+        hold: [5000.89, 18, 1],
+        profit: [
+            // 时间, 价格, 数量, 盈亏, 多1空0
+            ['2019-10-27', 4900, 5, -3500, 1],
+        ],
     },
     {
         code: 'PP',
@@ -28,7 +34,8 @@ export default [
         distribution: '',
         lever: 10,
         bond_count: 5,
-        profit: 0,
+        hold: [],
+        profit: [],
     },
     {
         code: 'AP',
@@ -38,7 +45,8 @@ export default [
         distribution: '',
         lever: 6.67,
         bond_count: 10,
-        profit: 1000,
+        hold: [7855, 1, 0],
+        profit: [],
     },
     {
         code: 'Y',
@@ -48,7 +56,10 @@ export default [
         distribution: '',
         lever: 10,
         bond_count: 10,
-        profit: 0,
+        hold: [],
+        profit: [
+            ['2019-10-28', 6180, 1, 260, 0],
+        ],
     },
     {
         code: 'CF',
@@ -58,7 +69,10 @@ export default [
         distribution: '',
         lever: 10,
         bond_count: 5,
-        profit: 450,
+        hold: [],
+        profit: [
+            ['2019-10-28', 12780, 2, 420, 0],
+        ],
     },
     {
         code: 'JD',
@@ -67,8 +81,9 @@ export default [
         industry: '农产品',
         distribution: '',
         lever: 10,
-        bond_count: 5,
-        profit: 0,
+        bond_count: 10,
+        hold: [4693.6, 5, 0],
+        profit: [],
     },
     {
         code: 'NI',
@@ -78,7 +93,12 @@ export default [
         distribution: 'haq',
         lever: 6.25,
         bond_count: 1,
-        profit: 1500,
+        hold: [],
+        profit: [
+            ['2019-10-27', 130550, 2, 480, 0],
+            ['2019-10-28', 130330, 1, 870, 0],
+            ['2019-10-28', 130350, 1, 690, 0],
+        ],
     },
     {
         code: 'ZN',
@@ -88,7 +108,10 @@ export default [
         distribution: 'haq',
         lever: 8.33,
         bond_count: 5,
-        profit: 0,
+        hold: [19045, 1, 0],
+        profit: [
+            ['2019-10-27', 18815, 1, 350, 1],
+        ],
     },
     {
         code: 'SN',
@@ -98,7 +121,10 @@ export default [
         distribution: 'haq',
         lever: 7.69,
         bond_count: 1,
-        profit: 540,
+        hold: [],
+        profit: [
+            ['2019-10-27', 138500, 1, 540, 1],
+        ],
     },
     {
         code: 'AG',
@@ -108,7 +134,10 @@ export default [
         distribution: 'haq',
         lever: 7.14,
         bond_count: 15,
-        profit: -1520,
+        hold: [],
+        profit: [
+            ['2019-10-27', 4442, 3, 1440, 0],
+        ],
     },
     {
         code: 'J',
@@ -118,7 +147,10 @@ export default [
         distribution: 'haq',
         lever: 7.69,
         bond_count: 100,
-        profit: -13000,
+        hold: [1780, 4, 1],
+        profit: [
+            ['2019-10-27', 1790, 3, -13000, 1],
+        ],
     },
     {
         code: 'BU',
@@ -128,6 +160,7 @@ export default [
         distribution: 'haq',
         lever: 6.25,
         bond_count: 10,
-        profit: 0,
+        hold: [],
+        profit: [],
     },
 ]

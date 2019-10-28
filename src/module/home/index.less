@@ -9,14 +9,34 @@
         flex-direction: column;
         overflow-x: auto;
         padding-bottom: 10px;
-        
+
         .ft_table_title {
             font-weight: bold;
         }
 
         .ft_table_title,
         .ft_table_list {
-            width: 2000px;
+            min-width: 4000px;
+            border-bottom: 1px solid #f5f3f3;
+
+            &.split {
+                border-bottom: 1px solid #edb9b9;
+            }
+
+            .del {
+                text-decoration: line-through;
+            }
+
+            .dichotomia {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                width: 80px;
+
+                div {
+                    margin: 0;
+                }
+            }
         }
 
         div {
