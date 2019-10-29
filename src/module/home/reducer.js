@@ -77,10 +77,10 @@ const CURR_FLUCTUATION_RANGE_WEIGHT = 5
 const DISTRIBUTION_WEIGHT = 5
 
 // 总权益
-const AGGREGATE_INTEREST = 300000
+const AGGREGATE_INTEREST = 200000
 
-// 最大持仓数  2短 2中 2长
-export const MAX_HOLD = 6
+// 最大持仓数  2短 1长
+export const MAX_HOLD = 3
 
 // 止损比例
 export const CUT_RATE = 0.01
