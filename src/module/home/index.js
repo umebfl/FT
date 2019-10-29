@@ -86,10 +86,10 @@ class Home extends Component {
                     <div className='ft_table_title'>
                         <span style={{width: '50px'}}>品种</span>
                         <span style={{width: '80px'}}>价格</span>
-                        <span style={{width: '80px'}}>止损</span>
                         <span style={{width: '80px'}}>波幅(%)</span>
                         <span style={{width: '140px'}}>持仓 {R.reduce((a, b) => a + b.cur_hold_count, 0)(variety)}</span>
                         <span style={{width: '100px'}}>当前盈亏 {R.reduce((a, b) => a + b.cur_profit, 0)(variety)}</span>
+                        <span style={{width: '80px'}}>止损</span>
                         <span style={{width: '80px'}}>累计盈利</span>
                         <span className='hidden' style={{width: '80px'}}>近月预估</span>
                         <span className='hidden' style={{width: '80px'}}>近周预估</span>
@@ -111,20 +111,17 @@ class Home extends Component {
                     {
                         R.addIndex(R.map)(
                             (v, k) => (
-                                <div className={cn('ft_table_list', {'split': k === MAX_HOLD + 2})} key={k}>
+                                <div className={cn('ft_table_list', {'split': k === MAX_HOLD - 1})} key={k}>
                                     <span style={{width: '50px'}} className={
                                         cn({
                                             'ft_haq': v.distribution === DISTRIBUTION_HAQ,
-                                            'del': k > MAX_HOLD + 2,
+                                            'del': k > MAX_HOLD - 1,
                                         })
                                     }>
                                         {v.name}
                                     </span>
                                     <span style={{width: '80px'}} className={v.wave > 0 ? 'ft_up' : 'ft_down'}>
                                         {v.price}
-                                    </span>
-                                    <span style={{width: '80px'}}>
-                                        {v.cut_price ? `${v.cut_price}(${v.hold[4] === 1 ? v.price - v.cut_price : v.cut_price - v.price})` : '-'}
                                     </span>
                                     <span style={{width: '80px'}} className={v.wave > 0 ? 'ft_up' : 'ft_down'}>
                                         {v.wave}
@@ -154,6 +151,9 @@ class Home extends Component {
                                                 )
                                                 : '-'
                                         }
+                                    </span>
+                                    <span style={{width: '80px'}}>
+                                        {v.cut_price ? `${v.cut_price}(${v.hold[4] === 1 ? v.price - v.cut_price : v.cut_price - v.price})` : '-'}
                                     </span>
                                     <span style={{width: '80px'}}>
                                         <Popover trigger='click' placement='topLeft' content={get_profit_arr(v)} title='平仓列表'>

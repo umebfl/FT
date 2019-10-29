@@ -71,7 +71,7 @@ const FLUCTUATION_RANGE_WEIGHT = 10
 const BOND_WEIGHT = 10
 
 // 当前波动幅度权重
-const CURR_FLUCTUATION_RANGE_WEIGHT = 6
+const CURR_FLUCTUATION_RANGE_WEIGHT = 5
 
 // 归属权重
 const DISTRIBUTION_WEIGHT = 5
@@ -79,8 +79,8 @@ const DISTRIBUTION_WEIGHT = 5
 // 总权益
 const AGGREGATE_INTEREST = 300000
 
-// 最大持仓数  3短 2中 2长
-export const MAX_HOLD = 7
+// 最大持仓数  2短 2中 2长
+export const MAX_HOLD = 6
 
 // 止损比例
 export const CUT_RATE = 0.01
