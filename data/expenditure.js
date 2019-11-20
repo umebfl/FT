@@ -14,24 +14,24 @@ export default [
     },
 
     // 贷款
-    {
-        id: '广发',
-        money: 1800,
-        total: 55000,
-        // 剩余
-        balance: 53804,
-    },
+    // {   // 已经结清
+    //     id: '广发',
+    //     money: 1800,
+    //     total: 55000,
+    //     // 剩余
+    //     balance: 53804,
+    // },
     {
         id: '好车',
         money: 3600,
         total: 86000,
-        balance: 86000,
+        balance: 82400,
     },
     {
         id: '招闪',
-        money: 7900,
+        money: 6800,
         total: 300000,
-        balance: 182000,
+        balance: 154000,
     },
 
     // 家贷

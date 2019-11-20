@@ -34,11 +34,11 @@ class Home extends Component {
 
     componentDidMount() {
 
-        this.props.action.search()
+        // this.props.action.search()
 
-        // this.props.action.reflush_log({
-        //     callback: this.props.action.search,
-        // })
+        this.props.action.reflush_log({
+            callback: this.props.action.search,
+        })
 
         this.timer_interval = setInterval(this.props.action.search, SEARCH_INTERVAL)
     }
@@ -94,7 +94,6 @@ class Home extends Component {
                         <span className='hidden' style={{width: '80px'}}>近月预估</span>
                         <span className='hidden' style={{width: '80px'}}>近周预估</span>
                         <span className='hidden' style={{width: '80px'}}>操作提示</span>
-                        <span>价格状态(%)</span>
                         <span>近一年走势(%)</span>
                         <span>近半年走势(%)</span>
                         <span>近三月走势(%)</span>
@@ -134,7 +133,7 @@ class Home extends Component {
                                     }>
                                         {v.hold[0] ? `${
                                             v.hold[2] === 1 ? '多' : '空'} ${parseInt(v.hold[0])} ${parseInt(v.cur_hold_count / 10000)}W(${v.hold[1]}/${v.can_buy})`
-                                        : '-'}
+                                            : '-'}
                                     </span>
                                     <span style={{width: '100px'}} className={v.cur_profit > 0 ? 'ft_up' : 'ft_down'}>
                                         {
@@ -163,9 +162,6 @@ class Home extends Component {
                                     <span className='hidden' style={{width: '80px'}}></span>
                                     <span className='hidden' style={{width: '80px'}}></span>
                                     <span className='hidden' style={{width: '80px'}}></span>
-                                    <span className={v.price_state_str === '中位' ? '' : v.price_state > 50 ? 'ft_up' : 'ft_down'}>
-                                        {v.price_state_str} / {v.price_state}
-                                    </span>
                                     <span className={v.nearly_year_str === '多' ? 'ft_up' : 'ft_down'}>
                                         {v.nearly_year_str} / {v.nearly_year_rate}
                                     </span>
@@ -345,7 +341,7 @@ const get_profit_arr = payload => {
                         (v, k) => (
                             <div key={k}>{v[0]} | {v[1]} {v[2]} {v[3]} {v[4] === 1 ? '多' : '空'}</div>
                         )
-                    ),
+                    )
                 )(payload.profit || [])
             }
         </div>

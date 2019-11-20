@@ -1,6 +1,6 @@
 export default [
     {
         msg: '驾照',
-        target: '11月科一',
+        target: '12月科二',
     },
 ]

@@ -43,15 +43,15 @@ export const DISTRIBUTION_HWG = 'hwh'
 const PRIORITY_WEIGHT = 100
 
 // 价格状态 权重20 计算：Math.abs(50 - 价格状态) / 50 * PRICE_STATE_WEIGHT
-const PRICE_STATE_WEIGHT = 10
+// const PRICE_STATE_WEIGHT = 10
 
 // 当前盈利权重 正负2千1点 最高10点
-const CUR_PROFIT_WEIGHT = 1
-const CUR_PROFIT_WEIGHT_PROPORTION = 8000
+const CUR_PROFIT_WEIGHT = 0
+const CUR_PROFIT_WEIGHT_PROPORTION = 20000 // 8000
 
 // 盈利权重 正负2千1点 最高10点
 const PROFIT_WEIGHT = 1
-const PROFIT_WEIGHT_PROPORTION = 4000
+const PROFIT_WEIGHT_PROPORTION = 20000 // 4000
 
 // 一段时间内最高最低价格波动幅度权重 正负10,1点
 const HL_FLUCTUATION_RANGE_WEIGHT = 1
@@ -68,19 +68,19 @@ const TIMELINE_WEIGHT = 5
 const FLUCTUATION_RANGE_WEIGHT = 10
 
 // 保证金权重
-const BOND_WEIGHT = 10
+const BOND_WEIGHT = 2
 
 // 当前波动幅度权重
 const CURR_FLUCTUATION_RANGE_WEIGHT = 5
 
 // 归属权重
-const DISTRIBUTION_WEIGHT = 5
+const DISTRIBUTION_WEIGHT = 0
 
 // 总权益
 const AGGREGATE_INTEREST = 200000
 
 // 最大持仓数  2短 1长
-export const MAX_HOLD = 3
+export const MAX_HOLD = 5
 
 // 止损比例
 export const CUT_RATE = 0.01
@@ -225,7 +225,7 @@ export const action = {
                                         const price_state = Math.ceil((price - price_min) / (price_max - price_min) * 100)
 
                                         // 资金状态权重
-                                        const weight_price_state = parseInt(Math.abs(50 - price_state) / 50 * PRICE_STATE_WEIGHT)
+                                        // const weight_price_state = parseInt(Math.abs(50 - price_state) / 50 * PRICE_STATE_WEIGHT)
 
                                         // 时间段状态权重
                                         const weight_timeline = get_timeline_weight(nearly_year, nearly_half_year, nearly_3_month, nearly_month, nearly_week)
@@ -290,10 +290,10 @@ export const action = {
                                                 text: '当前盈亏',
                                                 val: weight_cur_profit,
                                             },
-                                            {
-                                                text: '价格状态',
-                                                val: weight_price_state,
-                                            },
+                                            // {
+                                            //     text: '价格状态',
+                                            //     val: weight_price_state,
+                                            // },
                                             {
                                                 text: '时间段',
                                                 val: weight_timeline,
@@ -541,9 +541,9 @@ const get_timeline_weight = (nearly_year, nearly_half_year, nearly_3_month, near
 
     // 正正正正正 || 反反反反反
     if(nearly_year >= 0 && nearly_half_year >= 0 && nearly_3_month >= 0 && nearly_month >= 0 && nearly_week >= 0) {
-        weight = -2
+        weight = 0
     } else if(nearly_year <= 0 && nearly_half_year <= 0 && nearly_3_month <= 0 && nearly_month <= 0 && nearly_week <= 0) {
-        weight = -2
+        weight = 0
     }
 
     // 正正正正反 || 反反反反正
