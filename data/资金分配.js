@@ -29,7 +29,7 @@ export default [
                 id: '招闪',
                 money: 2900,
                 total: 300000,
-                balance: 63000,
+                balance: 0,
             },
             // 家贷
             {

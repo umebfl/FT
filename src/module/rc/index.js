@@ -6,6 +6,7 @@ import {
     Icon,
     Timeline,
     List,
+    Tag,
 } from 'antd'
 
 import {
@@ -31,6 +32,7 @@ class Rc extends Component {
                 flow,
                 capital,
                 idea,
+                strategy,
             },
             t,
             action,
@@ -39,7 +41,6 @@ class Rc extends Component {
 
         return (
             <div className='rc'>
-
                 <div className='type system'>
                     <div className='type_title'>
                         <Icon type='safety'/>
@@ -48,6 +49,58 @@ class Rc extends Component {
 
                     <div>
 
+                    </div>
+                </div>
+
+                <div className='type rule'>
+                    <div className='type_title'>
+                        <Icon type='bug'/>
+                        <div className='type_title_text'>规则</div>
+                    </div>
+
+                    <div>
+
+                    </div>
+                </div>
+
+                <div className='type strategy'>
+                    <div className='type_title'>
+                        <Icon type='insurance'/>
+                        <div className='type_title_text'>交易策略</div>
+                    </div>
+
+                    <div>
+                        <List
+                            size='small'
+                            dataSource={strategy}
+                            renderItem={item => (
+                                <List.Item>
+                                    {item.text}
+                                </List.Item>
+                            )}/>
+                    </div>
+                </div>
+
+                <div className='type idea'>
+                    <div className='type_title'>
+                        <Icon type='reddit'/>
+                        <div className='type_title_text'>理念</div>
+                    </div>
+
+                    <div>
+                        <List
+                            size='small'
+                            dataSource={idea}
+                            renderItem={item => (
+                                <List.Item>
+                                    {
+                                        R.map(
+                                            v => <Tag color='blue' key={v}>{v}</Tag>
+                                        )(item.type)
+                                    }
+                                    {item.content}
+                                </List.Item>
+                            )}/>
                     </div>
                 </div>
 
@@ -68,20 +121,6 @@ class Rc extends Component {
                     </div>
                 </div>
 
-                <div className='type idea'>
-                    <div className='type_title'>
-                        <Icon type='reddit'/>
-                        <div className='type_title_text'>理念</div>
-                    </div>
-
-                    <div>
-                        <List
-                          size='small'
-                          dataSource={idea}
-                          renderItem={item => <List.Item>{item.content}</List.Item>}/>
-                    </div>
-                </div>
-
                 <div className='type capital'>
                     <div className='type_title'>
                         <Icon type='transaction'/>
@@ -89,6 +128,14 @@ class Rc extends Component {
                     </div>
 
                     <div>
+                        <List
+                            size='small'
+                            dataSource={capital}
+                            renderItem={item => (
+                                <List.Item>
+                                    {item.type}
+                                </List.Item>
+                            )}/>
                     </div>
                 </div>
 
@@ -100,13 +147,13 @@ class Rc extends Component {
 
                     <div className='flow_content'>
                         <Timeline>
-                          {
-                              R.map(
-                                  v => (
-                                      <Timeline.Item>{v.text}</Timeline.Item>
-                                  )
-                              )(flow)
-                          }
+                            {
+                                R.map(
+                                    v => (
+                                        <Timeline.Item>{v.text}</Timeline.Item>
+                                    )
+                                )(flow)
+                            }
                         </Timeline>
                     </div>
                 </div>

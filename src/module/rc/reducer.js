@@ -15,6 +15,7 @@ import element from 'SYS/data/元素'
 import flow from 'SYS/data/流程'
 import capital from 'SYS/data/资金分配'
 import idea from 'SYS/data/理念'
+import strategy from 'SYS/data/交易策略'
 
 export const MODULE_KEY = 'rc'
 
@@ -25,6 +26,7 @@ const init_state = {
     flow,
     capital,
     idea,
+    strategy,
 
 }
 

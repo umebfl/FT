@@ -21,12 +21,12 @@ export default [
     //     // 剩余
     //     balance: 53804,
     // },
-    {
-        id: '招闪',
-        money: 2900,
-        total: 300000,
-        balance: 63000,
-    },
+    // {
+    //     id: '招闪',
+    //     money: 2900,
+    //     total: 300000,
+    //     balance: 63000,
+    // },
     {
         id: '好车',
         money: 3600,
@@ -46,12 +46,12 @@ export default [
     },
 
     // 奢侈消费
-    {
-        id: '旅游',
-        money: 0,
-        // 预算 自驾游 1个景点
-        budget: 5000,
-    },
+    // {
+    //     id: '旅游',
+    //     money: 0,
+    //     // 预算 自驾游 1个景点
+    //     budget: 5000,
+    // },
 
 
 ]

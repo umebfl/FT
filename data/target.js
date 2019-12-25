@@ -15,7 +15,7 @@ export default [
     {
         msg: '招商偿还',
         money: 174000,
-        finish: false,
+        finish: true,
         time: '2019年12月',
     },
     {
