@@ -1,0 +1,91 @@
+
+.rc {
+
+    display: flex;
+    flex-direction: column;
+    padding: 4px;
+
+    .element {
+
+        .element_content {
+            display: flex;
+            flex-wrap: wrap;
+
+
+            .element_item {
+                display: flex;
+                padding: 4px;
+            }
+        }
+    }
+
+    .flow {
+        .flow_content {
+            padding-top: 10px;
+        }
+
+        .ant-timeline-item:last-child {
+            padding-bottom: 0;
+        }
+    }
+
+    .occupational_system {
+
+        .occupational_system_info {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid #eee;
+            padding: 4px 0;
+
+            .occupational_system_msg,
+            .occupational_system_title {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+            }
+
+
+            .occupational_system_title_text,
+            .occupational_system_title_lv {
+                font-size: 14px;
+                color: black;
+                padding-right: 4px;
+            }
+
+            .occupational_system_msg_leader,
+            .occupational_system_msg_target {
+                padding-right: 4px;
+                font-size: 12px;
+            }
+
+            .occupational_system_finish {
+                color: #1890ff;
+            }
+        }
+    }
+}
+
+.type {
+    display: flex;
+    flex-direction: column;
+    padding: 4px;
+
+    .type_title {
+        display: flex;
+        align-items: center;
+        padding-bottom: 4px;
+        font-size: 16px;
+        font-weight: bold;
+        color: black;
+
+        .type_title_text {
+            padding-left: 4px;
+            padding-bottom: 4px;
+        }
+    }
+
+    .type_msg {
+        padding-bottom: 6px;
+        color: black;
+    }
+}

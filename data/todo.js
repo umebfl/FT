@@ -1,6 +1,10 @@
 export default [
     {
         msg: '驾照',
-        target: '12月科二',
+        target: '01月科二',
+    },
+    {
+        msg: '搬家具',
+        target: '01月',
     },
 ]

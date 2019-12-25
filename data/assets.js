@@ -26,10 +26,10 @@ export default [
     // 贷款
     {
         id: '招商8808',
-        money: 0,
+        money: 4200,
         use: '贷款',
         msg: '每月7900，维持2个月',
-        target: 7000,
+        target: 8000,
     },
     {
         id: '建设2025',

@@ -6,7 +6,7 @@ export default [
     },
     {
         id: '白条',
-        money: 2000,
+        money: 1000,
     },
     {
         id: '房租',
@@ -22,16 +22,17 @@ export default [
     //     balance: 53804,
     // },
     {
+        id: '招闪',
+        money: 2900,
+        total: 300000,
+        balance: 63000,
+    },
+    {
         id: '好车',
         money: 3600,
         total: 86000,
-        balance: 82400,
-    },
-    {
-        id: '招闪',
-        money: 6800,
-        total: 300000,
-        balance: 154000,
+        balance: 82400 - 15000 - 26000,  // 36400
+        back: 20000 + 26000,
     },
 
     // 家贷

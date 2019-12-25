@@ -3,12 +3,14 @@ import {
 } from 'redux'
 
 import home from 'SYSWEB/module/home/reducer'
+import rc from 'SYSWEB/module/rc/reducer'
 import i18n from 'SYSWEB/module/i18n/reducer'
 
 export const AUTH_SIGNOUT = 'redux_auth_signout'
 
 const app_reducer = combineReducers({
     home,
+    rc,
     i18n,
 })
 

@@ -100,7 +100,7 @@ class Home extends Component {
                         <span>近一月走势(%)</span>
                         <span>近一周走势(%)</span>
                         <span style={{width: '80px'}}>优先级</span>
-                        <span>资金配比</span>
+                        <span className='hidden'>资金配比</span>
                         <span>一手保证金</span>
                         <span>月份</span>
                         <span>行业</span>
@@ -182,7 +182,7 @@ class Home extends Component {
                                             <div className='can_click'>{v.priority}</div>
                                         </Popover>
                                     </span>
-                                    <span>{v.can_buy} / {v.fund}</span>
+                                    <span className='hidden'>{v.can_buy} / {v.fund}</span>
                                     <span>{parseInt(v.bond / 100) * 100 + ''}</span>
                                     <span>{v.month}</span>
                                     <span>{v.industry}</span>

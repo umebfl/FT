@@ -29,7 +29,7 @@ export default [
     {
         code: 'AP',
         name: '苹果',
-        month: '2001',
+        month: '2003',
         industry: '农产品',
         distribution: '',
         lever: 6.67,
@@ -74,7 +74,7 @@ export default [
         distribution: 'haq',
         lever: 6.25,
         bond_count: 1,
-        hold: [116086, 10, 0],
+        hold: [115158.74, 8, 0],
         profit: [
             ['2019-10-27', 130550, 2, 480, 0],
             ['2019-10-28', 130330, 1, 870, 0],
@@ -123,7 +123,7 @@ export default [
     {
         code: 'SN',
         name: '沪锡',
-        month: '2001',
+        month: '2005',
         industry: '有色金属',
         distribution: 'haq',
         lever: 7.69,
