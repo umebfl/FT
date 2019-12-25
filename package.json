@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "node ./build/server/index.js"
+    "start": "node ./build/server/index.js",
+    "build": "npx webpack --config webpack.config.js"
   },
   "dependencies": {
     "antd": "^3.10.3",

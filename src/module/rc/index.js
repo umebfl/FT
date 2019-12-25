@@ -94,8 +94,8 @@ class Rc extends Component {
                             renderItem={item => (
                                 <List.Item>
                                     {
-                                        R.map(
-                                            v => <Tag color='blue' key={v}>{v}</Tag>
+                                        R.addIndex(R.map)(
+                                            (v, k) => <Tag key={k} color='blue'>{v}</Tag>
                                         )(item.type)
                                     }
                                     {item.content}
@@ -112,12 +112,31 @@ class Rc extends Component {
 
                     <div className='element_content'>
                         {
-                            R.map(
-                                v => (
-                                    <div key={v} className='element_item'>{v}</div>
+                            R.addIndex(R.map)(
+                                (v, k) => (
+                                    <div key={k} className='element_item'>{v}</div>
                                 )
                             )(element)
                         }
+                    </div>
+                </div>
+
+                <div className='type flow'>
+                    <div className='type_title'>
+                        <Icon type='thunderbolt'/>
+                        <div className='type_title_text'>交易流程</div>
+                    </div>
+
+                    <div className='flow_content'>
+                        <Timeline>
+                            {
+                                R.addIndex(R.map)(
+                                    (v, k) => (
+                                        <Timeline.Item key={k}>{v.text}</Timeline.Item>
+                                    )
+                                )(flow)
+                            }
+                        </Timeline>
                     </div>
                 </div>
 
@@ -139,25 +158,6 @@ class Rc extends Component {
                     </div>
                 </div>
 
-                <div className='type flow'>
-                    <div className='type_title'>
-                        <Icon type='thunderbolt'/>
-                        <div className='type_title_text'>交易流程</div>
-                    </div>
-
-                    <div className='flow_content'>
-                        <Timeline>
-                            {
-                                R.map(
-                                    v => (
-                                        <Timeline.Item>{v.text}</Timeline.Item>
-                                    )
-                                )(flow)
-                            }
-                        </Timeline>
-                    </div>
-                </div>
-
                 <div className='type occupational_system'>
                     <div className='type_title'>
                         <Icon type='sketch'/>
@@ -170,9 +170,9 @@ class Rc extends Component {
 
                     <div>
                         {
-                            R.map(
-                                v => (
-                                    <div key={v.lv} className='occupational_system_info'>
+                            R.addIndex(R.map)(
+                                (v, k) => (
+                                    <div key={k} className='occupational_system_info'>
                                         <div className='occupational_system_title'>
                                             <div className='occupational_system_title_lv'>Lv{v.lv}</div>
                                             <div className={cn('occupational_system_title_text', {'occupational_system_finish': v.finish})}>
@@ -189,6 +189,38 @@ class Rc extends Component {
                         }
                     </div>
                 </div>
+
+                <div className='type'>
+                    <div className='type_title'>
+                        <Icon type='trophy'/>
+                        <div className='type_title_text'>年度结算</div>
+                    </div>
+
+                    <div>
+                        <List
+                            size='small'
+                            dataSource={[
+                                '2018-6 至 2019-12 净利润38W, 总盈利152W, 总亏损107W, 手续费7W',
+                            ]}
+                            renderItem={item => (
+                                <List.Item>
+                                    {item}
+                                </List.Item>
+                            )}/>
+                    </div>
+                </div>
+
+                <div className='type'>
+                    <div className='type_title'>
+                        <Icon type='star'/>
+                        <div className='type_title_text'>目标</div>
+                    </div>
+
+                    <div>
+
+                    </div>
+                </div>
+
             </div>
         )
     }
